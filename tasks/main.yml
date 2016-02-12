@@ -60,7 +60,10 @@
     - zsh
 
 - name: Switch to zsh
-  user: name={{ansible_ssh_user}} shell={{ zsh_path.stdout }}
   become: yes
+  user:
+    name: vagrant
+    shell: /usr/bin/zsh
+    state: present
   tags:
     - zsh
