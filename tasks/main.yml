@@ -7,6 +7,8 @@
   with_items: dependencies
   become: yes
   when: ansible_os_family == "Debian"
+  tags:
+    - zsh
 
 - name: Install zsh (with dependencies)
   homebrew:
@@ -15,35 +17,53 @@
     update_homebrew=yes
   with_items: dependencies
   when: ansible_os_family == "Darwin"
+  tags:
+    - zsh
 
 - name: Install oh-my-zsh
   git: repo=https://github.com/robbyrussell/oh-my-zsh dest=~/.oh-my-zsh
   sudo: no 
+  tags:
+    - zsh
 
 - name: Back up existing ~/.zshrc
   shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc ~/.zshrc.bak ; fi
   sudo: no 
+  tags:
+    - zsh
 
 - name: Back up existing ~/.zsh_aliases
   shell: if [ -f ~/.zsh_aliases ]; then mv ~/.zsh_aliases ~/.zsh_aliases.bak ; fi
   sudo: no 
+  tags:
+    - zsh
 
 - name: Copy my .zshrc
   command: curl -LSso ~/.zshrc https://raw.github.com/ChengLong/configs/master/.zshrc 
   sudo: no
+  tags:
+    - zsh
 
 - name: Copy my .zsh_aliases 
   command: curl -LSso ~/.zsh_aliases https://raw.github.com/ChengLong/configs/master/.zsh_aliases 
   sudo: no
+  tags:
+    - zsh
 
 - name: Copy my pygmalion.zsh-theme 
   command: curl -LSso ~/.oh-my-zsh/themes/pygmalion.zsh-theme https://raw.github.com/ChengLong/configs/master/pygmalion.zsh-theme
   sudo: no
+  tags:
+    - zsh
 
 - name: Get zsh path
   command: which zsh 
   register: zsh_path
+  tags:
+    - zsh
 
 - name: Switch to zsh
   user: name={{ansible_ssh_user}} shell={{ zsh_path.stdout }}
   become: yes
+  tags:
+    - zsh
